@@ -136,7 +136,13 @@ class Beam:
 
 class Score:
     def __init__(self):
-        
+        """
+        フォントの設定
+        文字色の設定：青
+        スコアの初期値の設定
+        文字列Surfaceの生成
+        文字列の中心座標
+        """
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.score = 0
         self.color = (0,0,255)
@@ -145,6 +151,10 @@ class Score:
         self.rct.center = 100,HEIGHT-50
     
     def update(self,screen: pg.Surface):
+        """
+        現在のスコアを表示させる文字列Surfaceの生成
+        スクリーンにblit
+        """
         self.img = self.fonto.render(f"スコア: {self.score}", 0, self.color)
         screen.blit(self.img, self.rct)
 
