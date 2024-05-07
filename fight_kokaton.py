@@ -5,8 +5,8 @@ import time
 import pygame as pg
 
 
-WIDTH = 1600  # ゲームウィンドウの幅
-HEIGHT = 900  # ゲームウィンドウの高さ
+WIDTH = 1000  # ゲームウィンドウの幅
+HEIGHT = 600  # ゲームウィンドウの高さ
 NUM_OF_BOMBS = 5
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -114,6 +114,7 @@ class Bomb:
             self.vy *= -1
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
+        
 
 
 class Beam:
@@ -133,6 +134,23 @@ class Beam:
             self.rct.move_ip(self.vx, self.vy)
             screen.blit(self.img, self.rct)
 
+class Score:
+    def __init__(self):
+        
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.score = 0
+        self.color = (0,0,255)
+        self.img = self.fonto.render(f"スコア: {self.score}", 0, self.color)
+        self.rct = self.img.get_rect()
+        self.rct.center = 100,HEIGHT-50
+    
+    def update(self,screen: pg.Surface):
+        self.img = self.fonto.render(f"スコア: {self.score}", 0, self.color)
+        screen.blit(self.img, self.rct)
+
+
+
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -142,6 +160,7 @@ def main():
     bombs = [Bomb((255, 0, 0), 10)for _ in range(NUM_OF_BOMBS)]
     beam = None
     clock = pg.time.Clock()
+    score = Score()
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -168,6 +187,7 @@ def main():
                     beam = None
                     bombs[i] = None
                     bird.change_img(6, screen)
+                    score.score += 1
                     pg.display.update()
         bombs = [bomb for bomb in bombs if bomb is not None]
 
@@ -177,6 +197,7 @@ def main():
             bomb.update(screen)
         if beam is not None:
             beam.update(screen)
+        score.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
